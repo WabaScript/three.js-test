@@ -8,9 +8,30 @@ const camera = new THREE.PerspectiveCamera(
     1000
 );
 
-const renderer = new THREE.WebGLRenderer();
+// enable anti-aliasing for smoother edges (perf decrease)
+const renderer = new THREE.WebGLRenderer({ antialias: true });
 
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 document.body.appendChild(renderer.domElement);
 
+const geometry = new THREE.BoxGeometry( 1, 1, 1 );
+const material = new THREE.MeshBasicMaterial( {color: 0x0000ff} );
+const cube = new THREE.Mesh( geometry, material );
+scene.add(cube);
+
+// adjust camera
+camera.position.z = 5
+
+// animate the scene (constant loop)
+const animate = () => {
+    requestAnimationFrame(animate);
+
+    // speed of rotation on each axis
+    cube.rotation.x += 0.01;
+    cube.rotation.y += 0.01;
+
+    renderer.render(scene, camera);
+}
+
+animate()
