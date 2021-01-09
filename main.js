@@ -1,27 +1,33 @@
-const scene = new THREE.Scene();
+// initialize functions to allow page dynamacity (window dmensions)
+let scene, camera, renderer, cube;
 
-// (FOV, aspect, nearPlane, farPlane)
-const camera = new THREE.PerspectiveCamera( 
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
-);
+const init = () => {
+    scene = new THREE.Scene();
+    
+    // (FOV, aspect, nearPlane, farPlane)
+    camera = new THREE.PerspectiveCamera( 
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+    );
+    
+    // enable anti-aliasing for smoother edges (perf decrease)
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    
+    document.body.appendChild(renderer.domElement);
+    
+    const geometry = new THREE.BoxGeometry( 1, 1, 1 );
+    const material = new THREE.MeshBasicMaterial( {color: 0x0000ff} );
+    cube = new THREE.Mesh( geometry, material );
+    scene.add(cube);
+    
+    // adjust camera
+    camera.position.z = 5
 
-// enable anti-aliasing for smoother edges (perf decrease)
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-
-renderer.setSize(window.innerWidth, window.innerHeight);
-
-document.body.appendChild(renderer.domElement);
-
-const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-const material = new THREE.MeshBasicMaterial( {color: 0x0000ff} );
-const cube = new THREE.Mesh( geometry, material );
-scene.add(cube);
-
-// adjust camera
-camera.position.z = 5
+}
 
 // animate the scene (constant loop)
 const animate = () => {
@@ -34,4 +40,13 @@ const animate = () => {
     renderer.render(scene, camera);
 }
 
+const onWindowResize = () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+window.addEventListener('resize', onWindowResize, false)
+
+init()
 animate()
