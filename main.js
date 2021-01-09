@@ -19,14 +19,44 @@ const init = () => {
     
     document.body.appendChild(renderer.domElement);
     
-    const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-    const material = new THREE.MeshBasicMaterial( {color: 0x0000ff} );
+    const geometry = new THREE.BoxGeometry( 2, 2, 2 );
+    // const material = new THREE.MeshBasicMaterial( {color: 0x0000ff} );
+    const material = new THREE.ShaderMaterial({
+        uniforms: {
+          color1: {
+            value: new THREE.Color("green")
+          },
+          color2: {
+            value: new THREE.Color("yellow")
+          }
+        },
+        vertexShader: `
+          varying vec2 vUv;
+      
+          void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+          }
+        `,
+        fragmentShader: `
+          uniform vec3 color1;
+          uniform vec3 color2;
+        
+          varying vec2 vUv;
+          
+          void main() {
+            
+            gl_FragColor = vec4(mix(color1, color2, vUv.y), 1.0);
+          }
+        `,
+        wireframe: true
+      });
+
     cube = new THREE.Mesh( geometry, material );
     scene.add(cube);
     
     // adjust camera
     camera.position.z = 5
-
 }
 
 // animate the scene (constant loop)
