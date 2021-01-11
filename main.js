@@ -19,15 +19,15 @@ const init = () => {
     
     document.body.appendChild(renderer.domElement);
     
-    const geometry = new THREE.BoxGeometry( 2, 2, 2 );
+    const geometry = new THREE.BoxGeometry( 2, 3, 2 );
     // const material = new THREE.MeshBasicMaterial( {color: 0x0000ff} );
     const material = new THREE.ShaderMaterial({
         uniforms: {
           color1: {
-            value: new THREE.Color("green")
+            value: new THREE.Color("blue")
           },
           color2: {
-            value: new THREE.Color("yellow")
+            value: new THREE.Color("white")
           }
         },
         vertexShader: `
